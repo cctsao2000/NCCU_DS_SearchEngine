@@ -1,4 +1,4 @@
-package stage2;
+package keyword;
 
 public class KeywordList extends LinkedList<Keyword>{
 	private LinkedList<Keyword> lst;

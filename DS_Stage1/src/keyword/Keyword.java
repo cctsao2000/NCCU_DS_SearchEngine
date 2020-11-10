@@ -1,4 +1,4 @@
-package stage2;
+package keyword;
 
 public class Keyword {
 	public String name;

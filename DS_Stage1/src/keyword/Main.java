@@ -1,4 +1,4 @@
-package stage2;
+package keyword;
 
 import java.io.File;
 import java.io.FileNotFoundException;
