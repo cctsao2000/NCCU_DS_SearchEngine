@@ -1,19 +1,21 @@
 package wordcounter;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Scanner;
+import googleCrawler.Demo;
+import keyword.Keyword;
+import keyword.KeywordList;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		System.out.println("Please type: URL Keyword");
-		Scanner sc = new Scanner(System.in);
-		while(sc.hasNextLine()){
-		    String urlStr = sc.next();
-		    String keyword = sc.next();
-		   
-		    WordCounter counter = new WordCounter(urlStr);
-		    System.out.println(counter.countKeyword(keyword));
+		LinkedList<String> results= Demo.buildList();
+		String keyword = "政治大學";
+		for (String result:results) {
+			WordCounter counter = new WordCounter(result);
+			System.out.print(result+" ");
+			System.out.print(counter.countKeyword(keyword));
+			System.out.println();
 		}
-		sc.close();
 	}
 }
