@@ -14,7 +14,9 @@ public class WordCounter {
     public WordCounter(String urlStr){
     	this.urlStr = urlStr;
     }
-    
+    public String getContent() {
+    	return content;
+    }
     private String fetchContent() throws IOException{
 		URL url = new URL(this.urlStr);
 		URLConnection conn = url.openConnection();
@@ -42,7 +44,6 @@ public class WordCounter {
 		keyword = keyword.toUpperCase();
 	
 		int retVal = 0; 
-		// 1. calculates appearances of keyword
 		int i = 0;
 		while(i < content.length()) {
 			if (i != -1){
@@ -52,7 +53,7 @@ public class WordCounter {
 			else
 				break;
 		}
-		retVal-=1; //把查不到那次return的-1刪掉
+		retVal-=1; //把查不到那次return的-1刪掉(encoding: UTF-8)
 		return retVal;
     }
 }
