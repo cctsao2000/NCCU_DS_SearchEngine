@@ -8,7 +8,6 @@ public class KeywordList extends LinkedList<Keyword>{
     }
 	
 	public void add(Keyword keyword){
-		//7. add keyword to proper index base on its count
 		if (lst.size() == 0){
 			lst.add(keyword);
 		}
