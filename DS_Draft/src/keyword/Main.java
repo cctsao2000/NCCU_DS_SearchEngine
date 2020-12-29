@@ -32,20 +32,6 @@ public class Main {
             		kLst.outputIndex(index);
 	        	}
 	        		break;	
-	        		
-	        	case "outputCount":
-	        	{
-	        		int count = sc.nextInt();
-            		kLst.outputCount(count);
-	        	}
-	        		break;
-	        		
-	        	case "outputHas":
-        	    {
-	        		String pattern = sc.next();
-	        		kLst.outputHas(pattern);
-        	    }
-        	    	break;
         	    
 	        	case "outputName":
         	    {
@@ -54,37 +40,12 @@ public class Main {
         	    }
         	    	break;
         	    	
-        	    case "outputFirstN":
-        	    {
-        	    	int n = sc.nextInt();
-        	    	kLst.outputFirstN(n);        		
-        	    }
-        	    	break;
-        	    	
-        	    case "outputScore":        	          
-        	    	kLst.outputScore();        		        	    
-        	    	break;
-        	    	
         	    case "deleteIndex":
         	    {
         	    	int index = sc.nextInt();
         	    	kLst.deleteIndex(index);       		
         	    }
         	    	break;
-        	    	
-        	    case "deleteCount":
-        	    {
-        	    	int count = sc.nextInt();
-        	    	kLst.deleteCount(count);       		
-        	    }
-        	    	break;
-        	    	
-        	    case "deleteHas":
-	    	    {
-		    		String pattern = sc.next();
-		    		kLst.deleteHas(pattern);	    		
-	    	    }
-	    	    	break;	
 	    	    	
         	    case "deleteName":
 	    	    {
@@ -92,13 +53,6 @@ public class Main {
 		    		kLst.deleteName(name);	    		
 	    	    }
 	    	    	break;		
-        	    	
-        	    case "deleteFirstN":
-        	    {
-        	    	int n = sc.nextInt();
-        	    	kLst.deleteFirstN(n);       		
-        	    }
-        	    	break;
         	    	
         	    case "deleteAll":
         	    	kLst.deleteAll();       		
