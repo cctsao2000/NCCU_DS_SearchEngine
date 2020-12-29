@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="beatGoogle/|html/" kind="src" path="DS_Draft/src"/>
+	<classpathentry kind="src" path="DS_Draft/src/beatGoogle"/>
+	<classpathentry kind="src" path="DS_Draft/src/html"/>
+	<classpathentry kind="output" path="DS_Draft/bin"/>
+</classpath>
