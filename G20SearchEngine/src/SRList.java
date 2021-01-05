@@ -36,11 +36,12 @@ public class SRList extends ArrayList<SearchResult>{
 		set(bIndex, temp);
 	}
 	
-	public void output(){
-		
+	public String output(){
+		String outRes = "";
 		for(int k=size()-1; k>-1;k--){	
-			System.out.println(get(k).getUrl()+" "+get(k).getScore());	
+			outRes += (get(k).getUrl()+" "+get(k).getScore()+"/n");	
 		}
+		return outRes;
 	}
 	
 }

@@ -27,7 +27,7 @@ public class Main {
 //		filter.add(f7);
 		Double score = 0.0;
 		Double totalScore = 0.0;
-		LinkedList<String> results= Demo.buildList();
+		LinkedList<String> results= Demo.buildList("");
 		SRList searchResults = new SRList();
 		int resultCount = 0;
 		for (String result:results) {

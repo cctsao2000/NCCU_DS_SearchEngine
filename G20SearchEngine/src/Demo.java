@@ -25,13 +25,10 @@ public class Demo {
 	}
 	
 	
-	public static LinkedList<String>buildList() throws IOException{
+	public static LinkedList<String>buildList(String pk) throws IOException{
 		Demo demo=new Demo();
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Please enter the search term.");
-		String searchTerm = scanner.nextLine();
+		String searchTerm = pk;
 		int num=100;
-		scanner.close();
 		
 		/**
 
@@ -45,7 +42,7 @@ public class Demo {
 		
 		String searchURL = GOOGLE_SEARCH_URL + "?q="+searchTerm+"&num="+num;
 		//without proper User-Agent, we will get 403 errorzz
-		Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").get();
+		Document doc = Jsoup.connect(searchURL).userAgent("Chrome/7.0.517.44").get();
 		Elements elements = doc.select("a[href]");
 		int count = 0;
 		
@@ -72,7 +69,7 @@ public class Demo {
 	
 	public static void main(String[] args) throws IOException {
 		//Taking search term input from console	
-		LinkedList<String> results= Demo.buildList();
+		LinkedList<String> results= Demo.buildList("nccu");
 		System.out.println(results.size());
 		for(String result:results) {
 			System.out.println(result);
