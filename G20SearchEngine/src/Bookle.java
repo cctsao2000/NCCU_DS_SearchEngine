@@ -2,12 +2,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
 
 @WebServlet("/Bookle")
 public class Bookle extends HttpServlet{
@@ -23,13 +23,12 @@ public class Bookle extends HttpServlet{
 		kl1.add(k1);
 		kl1.add(k2);
 		kl1.add(k3);
-		KeywordList filter = new KeywordList();
 		Double score = 0.0;
 		Double totalScore = 0.0;
-		LinkedList<String> results= Demo.buildList(primary);
+		SRList results= Crawler.buildList(primary+" book"+" -film");
 		SRList searchResults = new SRList();
 		int resultCount = 0;
-		for (String result:results) {
+		for (SearchResult result:results) {
 			if (resultCount >= 10) {
 				break;
 			}
@@ -40,27 +39,18 @@ public class Bookle extends HttpServlet{
 					}
 					else {
 						String keyword = key.name;
-				    	WordCounter counter = new WordCounter(result);
+				    	WordCounter counter = new WordCounter(result.getUrl());
 				    	counter.getContent();
 						score = counter.countKeyword(keyword) * key.weight;
 						totalScore += score;
-					}
-				}
-				if (totalScore != 0) {
-					for (Keyword fil:filter.getLst()) {
-				    	String filt = fil.name;
-				    	WordCounter counter = new WordCounter(result);
-				    	if(counter.getContent().indexOf(filt) != -1) {
-				    		totalScore *= -1;
-				    		break;
-				    	}
 					}
 				}
 				if(totalScore <= 0) {
 					continue;
 				}
 				resultCount += 1;
-				SearchResult res = new SearchResult(result,totalScore);
+				SearchResult res = new SearchResult(result.getUrl(),result.getName(),totalScore);
+				System.out.println(result.getUrl());
 				searchResults.add(res);
 				totalScore = 0.0;
 			}
@@ -89,7 +79,7 @@ public class Bookle extends HttpServlet{
 		out.println("<title>Bookle</title>");
 		out.println("<link rel='shortcut icon' href='favicon.ico' />");
 		out.println("<style type='text/css'>");
-		out.println("div {margin-top: 20px;margin-bottom: 20px;margin-right: 20px;}");
+		out.println("div {margin-top: 10px;margin-bottom: 10px;margin-right: 20px;}");
 		out.println("</style>");
 		out.println("</head>");
 		
@@ -108,7 +98,7 @@ public class Bookle extends HttpServlet{
 				+ "<input type='text' name='prime' placeholder = 'Search' required style=\" font-size:18px;border-radius:10px;border: transparent 10px solid;outline:none;background-color:#FDC2B7;width:500px;height:30px;\"/>\n"
 				+ "</td>\n"
 				+ "<td style=\"padding:20px;\">\n"
-				+ "<input type='image' value=\"\" src=\"2.jpg\" onClick=\"document.formname.submit();\" style=\"width:40px;height:40px;\"/>\n"
+				+ "<input type='image' value=\"\" src=\"02.jpg\" onClick=\"document.formname.submit();\" style=\"width:40px;height:40px;\"/>\n"
 				+ "</td>\n"
 				+ "</tr>\n"
 				+ "<tr>\n"
@@ -132,12 +122,12 @@ public class Bookle extends HttpServlet{
 				+ "</tr>\n"
 				+ "<tr>\n"
 				+ "<td>\n"
-				+ "<select>\n"
-				+ "    <option>N/A</option>\n"
-				+ "    <option>Document(.pdf)</option>\n"
-				+ "    <option>Slides(.pptx)</option>\n"
-				+ "    <option>Picture(.png)</option>\n"
-				+ "    <option>Picture(.jpg)</option>\n"
+				+ "<select name=\"type\">\n"
+				+ "    <option value=\"N/A\">N/A</option>\n"
+				+ "    <option value=\"Document(.pdf)\">Document(.pdf)</option>\n"
+				+ "    <option value=\"Slides(.pptx)\">Slides(.pptx)</option>\n"
+				+ "    <option value=\"Picture(.png)\">Picture(.png)</option>\n"
+				+ "    <option value=\"Picture(.jpg)\">Picture(.jpg)</option>\n"
 				+ "</select>\n"
 				+ "</td>\n"
 				+ "</tr>\n"
@@ -161,6 +151,7 @@ public class Bookle extends HttpServlet{
 		Double weitwo = Double.parseDouble(request.getParameter("weight2"));
 		String keythr  = request.getParameter("keyword3");
 		Double weithr = Double.parseDouble(request.getParameter("weight3"));
+		String typeK = request.getParameter("type");
 		
 		PrintWriter out = response.getWriter();
 		
@@ -170,13 +161,35 @@ public class Bookle extends HttpServlet{
 		out.println("<title>Bookle</title>");
 		out.println("<link rel='shortcut icon' href='favicon.ico' />");
 		out.println("<style type='text/css'>");
-		out.println("div {margin-top: 20px;margin-bottom: 20px;margin-right: 20px;}");
+		out.println("div {margin-top: 10px;margin-bottom: 10px;margin-right: 20px;}");
+		out.println("p.one{border-style: solid;border-width: 5px;border-radius:25px;border-color: #FDC2B7;padding-left: 20px;padding-top: 7px;}");
+		out.println("label.long{height:7px;width:120px;display: inline-block;border-style: solid;border-radius:12px;border: transparent 10px solid;outline:none;background-color:#DDDDDD;padding-left: 5px;padding-right: 5px;padding-bottom: 10px;}");
+		out.println("label.short{height:7px;width:100px;display: inline-block;border-style: solid;border-radius:12px;border: transparent 10px solid;outline:none;background-color:#DDDDDD;padding-left: 5px;padding-right: 5px;padding-bottom: 10px;}");
+		out.println("a.link{text-decoration:none;color:#fb6648;font-size:22px;margin-left:55px}");
+		out.println("a:hover {\n"
+				+ "text-decoration:underline;");
 		out.println("</style>");
 		out.println("</head>");
+		
 		out.println("<body>");
-		
+		out.println("<table style=\"margin-left:50px;\">\n"
+				+ "<thead>\n"
+				+ "</thead>\n"
+				+ "<tbody>\n"
+				+ "<tr>\n"
+				+ "<td rowspan=\"2\">\n"
+				+ "<img src=\"03.png\" width=120>\n"
+				+ "</td>\n"
+				+ "<td style=\"padding:30px;\">\n"
+				+ "<p for=\"primeKey\" class=\"one\" style=\" font-size:17px;outline:none;background-color:white;width:800px;height:35px;\">"+priK+"</p>\n"
+				+ "<label for=\"advKey\" class=\"long\" style=\" font-size:14px;outline:none;margin-right:10px\">"+keyone+"</label>\n"
+				+ "<label for=\"advKey\" class=\"long\" style=\" font-size:14px;outline:none;margin-right:10px\">"+keytwo+"</label>\n"
+				+ "<label for=\"advKey\" class=\"long\" style=\" font-size:14px;outline:none;margin-right:10px\">"+keythr+"</label>\n"
+				+ "<label for=\"typeKey\" class=\"short\" style=\" font-size:14px;outline:none;margin-right:10px\">"+typeK+"</label>\n"
+				+ "</td>\n"
+				+ "</tr>\n");
+		out.println("</tbody>\n"+"</table>");
 		out.println(search(priK,keyone,weione,keytwo,weitwo,keythr,weithr));
-		
 		out.println("</body>");
 		out.println("</html>");
 		

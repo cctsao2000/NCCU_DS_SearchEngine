@@ -4,7 +4,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,17 +27,7 @@ public class Demo {
 	public static LinkedList<String>buildList(String pk) throws IOException{
 		Demo demo=new Demo();
 		String searchTerm = pk;
-		int num=100;
-		
-		/**
-
-		 * search nccu,
-		 * num = 20 -> size = 28
-		 * num = 100 -> size = 57-73-103
-		 * num = 150 -> size = 73
-
-		 */
-
+		int num=30;
 		
 		String searchURL = GOOGLE_SEARCH_URL + "?q="+searchTerm+"&num="+num;
 		//without proper User-Agent, we will get 403 errorzz

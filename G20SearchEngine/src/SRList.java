@@ -39,7 +39,7 @@ public class SRList extends ArrayList<SearchResult>{
 	public String output(){
 		String outRes = "";
 		for(int k=size()-1; k>-1;k--){	
-			outRes += (get(k).getUrl()+" "+get(k).getScore()+"/n");	
+			outRes += String.format("<label style=\"font-size:12px;padding-left:55px;max-width:600px;overflow:hidden;\">%s</label><br>%n<a href='%s' target=\"_blank\" class=\"link\">%s</a> %.0f<br><br><br>",get(k).getUrl().split("&sa")[0],get(k).getUrl().split("&sa")[0],get(k).getName(),get(k).getScore());	
 		}
 		return outRes;
 	}
