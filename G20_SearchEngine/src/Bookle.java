@@ -27,12 +27,11 @@ public class Bookle extends HttpServlet{
 		Double score = 0.0;
 		Double totalScore = 0.0;
 		String gooPriK = URLEncoder.encode(primary,StandardCharsets.UTF_8.toString());
-		System.out.println(gooPriK);
 		SRList results= Crawler.buildList(gooPriK+"+book"+"+-film");
 		SRList searchResults = new SRList();
 		int resultCount = 0;
 		for (SearchResult result:results) {
-			if (resultCount >= 5) {
+			if (resultCount >= 10) { //number of results
 				break;
 			}
 			try {
