@@ -1,13 +1,14 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedList;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jsoup.Jsoup;
 
 @WebServlet("/Bookle")
 public class Bookle extends HttpServlet{
@@ -25,11 +26,13 @@ public class Bookle extends HttpServlet{
 		kl1.add(k3);
 		Double score = 0.0;
 		Double totalScore = 0.0;
-		SRList results= Crawler.buildList(primary+" book"+" -film");
+		String gooPriK = URLEncoder.encode(primary,StandardCharsets.UTF_8.toString());
+		System.out.println(gooPriK);
+		SRList results= Crawler.buildList(gooPriK+"+book"+"+-film");
 		SRList searchResults = new SRList();
 		int resultCount = 0;
 		for (SearchResult result:results) {
-			if (resultCount >= 10) {
+			if (resultCount >= 5) {
 				break;
 			}
 			try {
@@ -51,6 +54,7 @@ public class Bookle extends HttpServlet{
 				resultCount += 1;
 				SearchResult res = new SearchResult(result.getUrl(),result.getName(),totalScore);
 				searchResults.add(res);
+				System.out.println(result.getUrl());
 				totalScore = 0.0;
 			}
 			catch(NullPointerException e){
@@ -66,7 +70,7 @@ public class Bookle extends HttpServlet{
 		searchResults.sort();
 		return searchResults.output();
 	}
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String requestUri = request.getRequestURI();
@@ -132,9 +136,8 @@ public class Bookle extends HttpServlet{
 				+ "</tr>\n"
 				+ "</tbody>\n"
 				+ "</table>\n"
-				+ "</form></div>\n"
-				+ "</body>\n"
-				+ "</html>");
+				+ "</form></div>\n");
+		out.println("</body>\n"+"</html>");
 		
 		out.flush();
 		out.close();
@@ -146,10 +149,26 @@ public class Bookle extends HttpServlet{
 		String priK  = request.getParameter("prime");
 		String keyone  = request.getParameter("keyword1");
 		Double weione = Double.parseDouble(request.getParameter("weight1"));
-		String keytwo  = request.getParameter("keyword2");
-		Double weitwo = Double.parseDouble(request.getParameter("weight2"));
-		String keythr  = request.getParameter("keyword3");
-		Double weithr = Double.parseDouble(request.getParameter("weight3"));
+		String keytwo;
+		Double weitwo;
+		String keythr;
+		Double weithr;
+		if(request.getParameter("keyword2")==null) {
+			keytwo  = "null";
+			weitwo = 0.0;
+		}
+		else {
+			keytwo = request.getParameter("keyword2");
+			weitwo = Double.parseDouble(request.getParameter("weight2"));
+		}
+		if(request.getParameter("keyword3")==null) {
+			keythr  = "null";
+			weithr = 0.0;
+		}
+		else {
+			keythr = request.getParameter("keyword3");
+			weithr = Double.parseDouble(request.getParameter("weight3"));
+		}
 		String typeK = request.getParameter("type");
 		
 		PrintWriter out = response.getWriter();
@@ -163,8 +182,8 @@ public class Bookle extends HttpServlet{
 		out.println("<style type='text/css'>");
 		out.println("div {margin-top: 10px;margin-bottom: 10px;margin-right: 20px;}");
 		out.println("p.one{border-style: solid;border-width: 5px;border-radius:25px;border-color: #FDC2B7;padding-left: 20px;padding-top: 7px;}");
-		out.println("label.long{height:7px;width:120px;display: inline-block;border-style: solid;border-radius:12px;border: transparent 10px solid;outline:none;background-color:#DDDDDD;padding-left: 5px;padding-right: 5px;padding-bottom: 10px;}");
-		out.println("label.short{height:7px;width:100px;display: inline-block;border-style: solid;border-radius:12px;border: transparent 10px solid;outline:none;background-color:#DDDDDD;padding-left: 5px;padding-right: 5px;padding-bottom: 10px;}");
+		out.println("label.long{height:7px;display: inline-block;border-style: solid;border-radius:12px;border: transparent 10px solid;outline:none;background-color:#DDDDDD;padding-left: 5px;padding-right: 5px;padding-bottom: 10px;}");
+		out.println("label.short{height:7px;display: inline-block;border-style: solid;border-radius:12px;border: transparent 10px solid;outline:none;background-color:#DDDDDD;padding-left: 5px;padding-right: 5px;padding-bottom: 10px;}");
 		out.println("a.link{text-decoration:none;color:#fb6648;font-size:22px;margin-left:55px}");
 		out.println("a:hover {\n"
 				+ "text-decoration:underline;");
